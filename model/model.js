@@ -25,9 +25,15 @@ export class Model {
    * @param {*} updatedText 
    */
   editTodo(id, updatedText) {
+    if(updatedText.trim()==''){
+      this.todos = this.todos.filter((todo) =>todo.id !=id);
+    this._commit(this.todos);
+
+  }
     this.todos = this.todos.map((todo) =>
       todo.id === id ? {id: todo.id, text: updatedText, complete: todo.complete} : todo,
-    )
+    );
+    this._commit(this.todos);
   }
 /**
  * delete element from todos array
@@ -35,7 +41,6 @@ export class Model {
  */
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id)
-    localStorage.removeItem('todos')
     this._commit(this.todos)
     
   }
@@ -51,10 +56,7 @@ export class Model {
     this._commit(this.todos)
   }
   
-  bindTodoListChanged(callback) {
-    this.onTodoListChanged = callback
-  }
-  
+
 
   _commit(todos) {
     localStorage.setItem('todos', JSON.stringify(todos))
